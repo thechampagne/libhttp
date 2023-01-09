@@ -4,16 +4,10 @@ import core.stdc.stdlib;
 import core.stdc.string;
 import arsd.http;
 
-union __http_res_t__
-{
-  char* buffer;
-  char* error;
-}
-
 struct http_t
 {
   int is_err;
-  __http_res_t__ res;
+  char* buffer;
 }
 
 extern(C) http_t http_get(const char* url,
@@ -39,7 +33,7 @@ extern(C) http_t http_get(const char* url,
     auto str = get(url.fromStringz.idup, cookies);
     auto res = cast(char*) malloc(char.sizeof * str.length + 1);
     strcpy(res, str.toStringz);
-    http.res.buffer = res;
+    http.buffer = res;
     http.is_err = 0;
     return http;
   }
@@ -47,7 +41,7 @@ extern(C) http_t http_get(const char* url,
   {
     auto res = cast(char*) malloc(char.sizeof * ex.msg.length + 1);
     strcpy(res, ex.msg.toStringz);
-    http.res.error = res;
+    http.buffer = res;
     http.is_err = 1;
     return http;
   }

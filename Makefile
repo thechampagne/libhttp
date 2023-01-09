@@ -17,6 +17,12 @@ $(BUILD)/main.o: main.d
 $(BUILD)/http.o: http.d
 	$(DD) -c -od$(BUILD) $<
 
+.PHONY: test
+
+test:
+	$(DD) -main -unittest -oftest unittest.d main.d http.d
+	./test
+
 clean:
 	find $(BUILD) -type f -name '*.o' -delete
 	find lib -type f \( -name '*.so' -o -name '*.a' \) -delete
